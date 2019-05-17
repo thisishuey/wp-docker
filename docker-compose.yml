@@ -1,0 +1,39 @@
+version: "3.3"
+
+services:
+  db:
+    container_name: "wpmu-docker_db"
+    environment:
+      MYSQL_DATABASE: "${WPMU_DOCKER_DB}"
+      MYSQL_USER: "${WPMU_DOCKER_USER}"
+      MYSQL_PASSWORD: "${WPMU_DOCKER_PASSWORD}"
+      MYSQL_RANDOM_ROOT_PASSWORD: "1"
+    image: "mysql:5.7"
+    restart: "always"
+    volumes:
+      - source: "db"
+        target: "/var/lib/mysql"
+        type: "volume"
+
+  wp:
+    container_name: "wpmu-docker_wp"
+    depends_on:
+      - "db"
+    environment:
+      WORDPRESS_DB_HOST: "db"
+      WORDPRESS_DB_NAME: "${WPMU_DOCKER_DB}"
+      WORDPRESS_DB_USER: "${WPMU_DOCKER_USER}"
+      WORDPRESS_DB_PASSWORD: "${WPMU_DOCKER_PASSWORD}"
+    image: "wordpress:latest"
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: "always"
+    volumes:
+      - source: "wp"
+        target: "/var/www/html"
+        type: "volume"
+
+volumes:
+  db: {}
+  wp: {}

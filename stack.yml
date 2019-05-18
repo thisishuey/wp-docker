@@ -1,36 +1,42 @@
-version: "3.3"
+version: "3.7"
 
 services:
   db:
-    container_name: "wpmu-docker_db"
+    deploy:
+      resources:
+        limits:
+          memory: "256M"
+        reservations:
+          memory: "128M"
     environment:
-      MYSQL_DATABASE: "${WPMU_DOCKER_DB}"
-      MYSQL_USER: "${WPMU_DOCKER_USER}"
-      MYSQL_PASSWORD: "${WPMU_DOCKER_PASSWORD}"
+      MYSQL_DATABASE: "wpmu"
+      MYSQL_USER: "dev"
+      MYSQL_PASSWORD: "password"
       MYSQL_RANDOM_ROOT_PASSWORD: "1"
     image: "mysql:5.7"
-    mem_limit: "256M"
-    restart: "always"
     volumes:
       - source: "db"
         target: "/var/lib/mysql"
         type: "volume"
 
   wp:
-    container_name: "wpmu-docker_wp"
     depends_on:
       - "db"
+    deploy:
+      resources:
+        limits:
+          memory: "128M"
+        reservations:
+          memory: "64M"
     environment:
       WORDPRESS_DB_HOST: "db"
-      WORDPRESS_DB_NAME: "${WPMU_DOCKER_DB}"
-      WORDPRESS_DB_USER: "${WPMU_DOCKER_USER}"
-      WORDPRESS_DB_PASSWORD: "${WPMU_DOCKER_PASSWORD}"
+      WORDPRESS_DB_NAME: "wpmu"
+      WORDPRESS_DB_USER: "dev"
+      WORDPRESS_DB_PASSWORD: "password"
     image: "wordpress:latest"
-    mem_limit: "128M"
     ports:
       - "80:80"
       - "443:443"
-    restart: "always"
     volumes:
       - source: "wp"
         target: "/var/www/html"

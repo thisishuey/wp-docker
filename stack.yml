@@ -1,47 +1,36 @@
-version: "3.7"
-
 services:
   db:
     deploy:
       resources:
         limits:
-          memory: "256M"
+          memory: 256M
         reservations:
-          memory: "128M"
-    environment:
-      MYSQL_DATABASE: "wpmu"
-      MYSQL_USER: "dev"
-      MYSQL_PASSWORD: "password"
-      MYSQL_RANDOM_ROOT_PASSWORD: "1"
-    image: "mysql:5.7"
+          memory: 128M
+    image: mysql:5.7
     volumes:
-      - source: "db"
-        target: "/var/lib/mysql"
-        type: "volume"
-
+      - source: db
+        target: /var/lib/mysql
+        type: volume
   wp:
     depends_on:
-      - "db"
+      - db
     deploy:
       resources:
         limits:
-          memory: "128M"
+          memory: 128M
         reservations:
-          memory: "64M"
-    environment:
-      WORDPRESS_DB_HOST: "db"
-      WORDPRESS_DB_NAME: "wpmu"
-      WORDPRESS_DB_USER: "dev"
-      WORDPRESS_DB_PASSWORD: "password"
-    image: "wordpress:latest"
+          memory: 64M
+    image: wordpress:latest
     ports:
-      - "80:80"
-      - "443:443"
+      - published: 80
+        target: 80
+      - published: 443
+        target: 443
     volumes:
-      - source: "wp"
-        target: "/var/www/html"
-        type: "volume"
-
+      - source: wp
+        target: /var/www/html
+        type: volume
+version: '3.7'
 volumes:
   db: {}
   wp: {}

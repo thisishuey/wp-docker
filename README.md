@@ -1,1 +1,1 @@
-# wpmu-docker
+# wp-docker

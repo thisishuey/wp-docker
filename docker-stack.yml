@@ -1,6 +1,6 @@
 services:
   db:
-    env_file: .env.db
+    env_file: .env
     image: mariadb:latest
     volumes:
       - source: db
@@ -9,7 +9,7 @@ services:
   wp:
     depends_on:
       - db
-    env_file: .env.wp
+    env_file: .env
     image: wordpress:latest
     ports:
       - published: 80

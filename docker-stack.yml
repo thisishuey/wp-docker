@@ -1,12 +1,7 @@
 services:
   db:
-    deploy:
-      resources:
-        limits:
-          memory: 256M
-        reservations:
-          memory: 128M
-    image: mysql:5.7
+    env_file: .env.db
+    image: mariadb:latest
     volumes:
       - source: db
         target: /var/lib/mysql
@@ -14,12 +9,7 @@ services:
   wp:
     depends_on:
       - db
-    deploy:
-      resources:
-        limits:
-          memory: 128M
-        reservations:
-          memory: 64M
+    env_file: .env.wp
     image: wordpress:latest
     ports:
       - published: 80
@@ -30,7 +20,7 @@ services:
       - source: wp
         target: /var/www/html
         type: volume
-version: '3.7'
+version: "3.7"
 volumes:
   db: {}
   wp: {}

@@ -1,26 +1,36 @@
 services:
-  db:
+  database:
     env_file: .env
     image: mariadb:latest
     volumes:
-      - source: db
+      - source: database
         target: /var/lib/mysql
         type: volume
-  wp:
+  wordpress:
     depends_on:
-      - db
+      - database
     env_file: .env
     image: wordpress:latest
+    volumes:
+      - source: wordpress
+        target: /var/www/html
+        type: volume
+  certs:
+    depends_on:
+      - wordpress
+    env_file: .env
+    image: steveltn/https-portal:1
     ports:
       - published: 80
         target: 80
       - published: 443
         target: 443
     volumes:
-      - source: wp
-        target: /var/www/html
+      - source: certs
+        target: /var/lib/https-portal
         type: volume
 version: "3.7"
 volumes:
-  db: {}
-  wp: {}
+  database: {}
+  wordpress: {}
+  certs: {}

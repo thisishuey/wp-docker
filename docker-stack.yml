@@ -15,7 +15,7 @@ services:
       - source: wordpress
         target: /var/www/html
         type: volume
-  certs:
+  https:
     depends_on:
       - wordpress
     env_file: .env
@@ -26,11 +26,11 @@ services:
       - published: 443
         target: 443
     volumes:
-      - source: certs
+      - source: https
         target: /var/lib/https-portal
         type: volume
 version: "3.7"
 volumes:
   database: {}
   wordpress: {}
-  certs: {}
+  https: {}

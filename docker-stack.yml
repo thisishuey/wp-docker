@@ -15,6 +15,9 @@ services:
       - source: wordpress
         target: /var/www/html
         type: volume
+      - source: ./docker-php-uploads.ini
+        target: /usr/local/etc/php/conf.d/docker-php-uploads.ini
+        type: bind
   https:
     depends_on:
       - wordpress
